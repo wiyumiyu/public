@@ -1,0 +1,5 @@
+/* Fondo personalizado solo para la página de login */
+.auth-body-bg {
+  background-color: #0066cc !important; /* azul */
+  background-image: none !important;    /* elimina fondo del tema si lo tuviera */
+}
