@@ -1,5 +1,29 @@
 /* Fondo personalizado solo para la página de login */
 .auth-body-bg {
-  background-color: #0066cc !important; /* azul */
-  background-image: none !important;    /* elimina fondo del tema si lo tuviera */
+    background-color: #0066cc !important; /* azul */
+    background-image: none !important;
+}
+
+/* Contenedor principal centrado verticalmente */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-top: 30px;
+}
+
+/* Tamaño y estilo de la tarjeta */
+.auth-box {
+    width: 380px;
+    padding: 2.4rem !important;
+    border-radius: 18px !important;
+    transform: translateY(-20px); /* baja un poquito */
+}
+
+/* Más grande en pantallas grandes */
+@media (min-width: 992px) {
+    .auth-box {
+        width: 420px;
+    }
 }
