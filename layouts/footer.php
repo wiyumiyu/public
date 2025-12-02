@@ -1,3 +1,47 @@
+
+<script>
+// ===============================
+// TOGGLE SIDEBAR (COLLAPSE)
+// ===============================
+document.addEventListener("DOMContentLoaded", function () {
+
+    const btn = document.getElementById("toggleSidebar");
+    const sidebar = document.querySelector(".pe-app-sidebar");
+    const mainContent = document.querySelector("main");
+
+    if (!btn || !sidebar) {
+        console.warn("Sidebar or toggle button not found.");
+        return;
+    }
+
+    btn.addEventListener("click", function () {
+
+        // alternar clase
+        sidebar.classList.toggle("collapsed");
+
+        // mover el contenido si querés efecto Fabkin
+        if (mainContent) {
+            mainContent.classList.toggle("sidebar-collapsed");
+        }
+
+        // cambiar flecha
+        const icon = this.querySelector("i");
+        if (icon) {
+            if (sidebar.classList.contains("collapsed")) {
+                icon.classList.remove("bi-arrow-bar-left");
+                icon.classList.add("bi-arrow-bar-right");
+            } else {
+                icon.classList.remove("bi-arrow-bar-right");
+                icon.classList.add("bi-arrow-bar-left");
+            }
+        }
+    });
+});
+</script>
+
+
+
+
 <script>
 // ===================================================
 // MODO CLARO / OSCURO — COMPATIBLE CON TU TOPBAR REAL

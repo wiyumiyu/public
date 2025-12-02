@@ -22,14 +22,21 @@ $content     = $content     ?? '';
     <link href="/assets/css/app.min.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="/assets/css/custom.css" rel="stylesheet">
+    <link href="/assets/libs/simplebar/simplebar.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-body">
 
 <?php include __DIR__ . '/topbar.php'; ?>
 
-<div class="d-flex">
+<div class="pe-layout">
     <?php include __DIR__ . '/sidebar.php'; ?>
+
+    <div class="pe-content">
+        <main class="p-4">
+            <?= $content ?>
+        </main>
+    </div>
 </div>
     
 <?php  include __DIR__ . '/footer.php'; ?>
@@ -37,8 +44,11 @@ $content     = $content     ?? '';
 
 <!-- JS del template -->
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/js/simplebar.min.js"></script>
-<script src="/assets/js/waves.min.js"></script>
+<!--<script src="/assets/js/simplebar.min.js"></script>-->
+<script src="/assets/libs/simplebar/simplebar.min.js"></script>
+<!--<script src="/assets/js/waves.min.js"></script>-->
+<script src="/assets/libs/node-waves/waves.min.js"></script>
+
 <script src="/assets/js/app.js"></script>
 
 <script>

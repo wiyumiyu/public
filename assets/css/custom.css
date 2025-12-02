@@ -27,3 +27,34 @@
         width: 420px;
     }
 }
+/* ---------------------------
+   SIDEBAR COLLAPSE REAL
+---------------------------- */
+.pe-layout {
+    display: flex;
+    transition: all .25s ease;
+}
+
+/* Ancho normal */
+.pe-app-sidebar {
+    width: 260px;
+    transition: width .25s ease;
+}
+
+/* Ancho colapsado */
+.pe-app-sidebar.collapsed {
+    width: 70px !important;
+}
+
+/* mover el contenido */
+.pe-content {
+    flex-grow: 1;
+    transition: margin-left .25s ease;
+    margin-left: 260px;
+}
+
+.pe-app-sidebar.collapsed ~ .pe-content {
+    margin-left: 70px !important;
+}
+
+
