@@ -30,14 +30,9 @@ $content     = $content     ?? '';
 
 <div class="d-flex">
     <?php include __DIR__ . '/sidebar.php'; ?>
-
-    <main class="flex-grow-1 p-4">
-        <?php if (!empty($breadcrumbs)) include __DIR__ . '/breadcrumbs.php'; ?>
-        <?= $content ?>
-    </main>
 </div>
     
-    <?php  include __DIR__ . '/footer.php'; ?>
+<?php  include __DIR__ . '/footer.php'; ?>
    
 
 <!-- JS del template -->
