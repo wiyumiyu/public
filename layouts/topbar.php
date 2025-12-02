@@ -60,7 +60,7 @@ $avatar = $_SESSION['user']['avatar'] ?? '../assets/images/avatar/avatar-10.jpg'
                         </div>
                         <ul class="list-unstyled mb-1 border-bottom pb-1">
                         <ul class="list-unstyled mb-0">
-                            <li><a class="dropdown-item" href="javascript:void(0)"><i class="bi bi-box-arrow-right me-1"></i> Sign Out</a></li>
+                            <li><a class="dropdown-item" href="/logout.php"><i class="bi bi-box-arrow-right me-1"></i> Sign Out</a></li>
                         </ul>
                     </div>
                 </div>

@@ -25,10 +25,11 @@
                         <a href="javascript:void(0)">Ingreso de Datos</a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-products" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/textura/index.php" class="pe-nav-link">
                             Textura
                         </a>
                     </li>
+
                     <li class="pe-slide-item">
                         <a href="apps-ecommerce-products-details" class="pe-nav-link">
                             Densidad Aparente
