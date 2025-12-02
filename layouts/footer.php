@@ -4,10 +4,9 @@
 // TOGGLE SIDEBAR (COLLAPSE)
 // ===============================
 document.addEventListener("DOMContentLoaded", function () {
-
-    const btn = document.getElementById("toggleSidebar");
-    const sidebar = document.querySelector(".pe-app-sidebar");
-    const mainContent = document.querySelector("main");
+    const btn      = document.getElementById("toggleSidebar");
+    const sidebar  = document.querySelector(".pe-app-sidebar");
+    const body     = document.body;
 
     if (!btn || !sidebar) {
         console.warn("Sidebar or toggle button not found.");
@@ -15,16 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     btn.addEventListener("click", function () {
-
-        // alternar clase
+        // 1) Colapsar / expandir sidebar
         sidebar.classList.toggle("collapsed");
 
-        // mover el contenido si querés efecto Fabkin
-        if (mainContent) {
-            mainContent.classList.toggle("sidebar-collapsed");
-        }
+        // 2) Marcar estado global en el body
+        body.classList.toggle("sidebar-collapsed");
 
-        // cambiar flecha
+        // 3) Cambiar flecha
         const icon = this.querySelector("i");
         if (icon) {
             if (sidebar.classList.contains("collapsed")) {
@@ -37,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
 </script>
 
 

@@ -1,10 +1,11 @@
-/* Fondo personalizado solo para la página de login */
+/* ============================================================
+   LOGIN (NO TOCAR)
+============================================================ */
 .auth-body-bg {
-    background-color: #0066cc !important; /* azul */
+    background-color: #0066cc !important;
     background-image: none !important;
 }
 
-/* Contenedor principal centrado verticalmente */
 .auth-wrapper {
     min-height: 100vh;
     display: flex;
@@ -13,48 +14,103 @@
     padding-top: 30px;
 }
 
-/* Tamaño y estilo de la tarjeta */
 .auth-box {
     width: 380px;
     padding: 2.4rem !important;
     border-radius: 18px !important;
-    transform: translateY(-20px); /* baja un poquito */
+    transform: translateY(-20px);
 }
 
-/* Más grande en pantallas grandes */
 @media (min-width: 992px) {
     .auth-box {
         width: 420px;
     }
 }
-/* ---------------------------
-   SIDEBAR COLLAPSE REAL
----------------------------- */
-.pe-layout {
-    display: flex;
-    transition: all .25s ease;
-}
 
-/* Ancho normal */
+
+
+/* ============================================================
+   SIDEBAR COLLAPSE
+============================================================ */
+
+/* Ancho normal del sidebar */
 .pe-app-sidebar {
     width: 260px;
     transition: width .25s ease;
 }
 
-/* Ancho colapsado */
+/* Sidebar colapsado */
 .pe-app-sidebar.collapsed {
     width: 70px !important;
+    overflow: hidden;
 }
 
-/* mover el contenido */
-.pe-content {
-    flex-grow: 1;
-    transition: margin-left .25s ease;
+/* Ocultar texto cuando colapsa */
+.pe-app-sidebar.collapsed .pe-nav-content,
+.pe-app-sidebar.collapsed .pe-nav-content1,
+.pe-app-sidebar.collapsed .pe-nav-arrow {
+    display: none !important;
+}
+
+/* Íconos centrados */
+.pe-app-sidebar.collapsed .pe-nav-link {
+    justify-content: center !important;
+}
+
+.pe-app-sidebar.collapsed .pe-nav-icon {
+    margin-right: 0 !important;
+}
+
+/* ============================================================
+   MOVIMIENTO DEL TOPBAR + CONTENIDO
+   (se basan en la clase body.sidebar-collapsed)
+============================================================ */
+
+/* Contenido normal */
+main.pe-content {
     margin-left: 260px;
+    transition: margin-left .25s ease;
 }
 
-.pe-app-sidebar.collapsed ~ .pe-content {
+/* Contenido cuando la barra está cerrada */
+body.sidebar-collapsed main.pe-content {
     margin-left: 70px !important;
 }
 
+/* Topbar normal */
+.app-header {
+    margin-left: 0px;     /* antes 260 */
+    transition: margin-left .25s ease;
+}
 
+/* Topbar colapsado */
+body.sidebar-collapsed .app-header {
+    margin-left: -180px !important;   /* antes 70 */
+}
+
+
+/* ============================================================
+   OPCIONAL: Mejora visual del hover del sidebar
+============================================================ */
+.pe-app-sidebar .pe-nav-link:hover {
+    background-color: rgba(255,255,255,0.05);
+}
+
+/* ============================================================
+   FIN CUSTOM.CSS
+============================================================ */
+
+
+
+/* Contenido alineado con sidebar abierto */
+.pe-content {
+    margin-left: 260px;
+    margin-top: 70px;   /* baja el contenido debajo del topbar */
+    padding: 20px;      /* opcional: para que no quede pegado */
+    transition: margin-left .25s ease;
+}
+
+/* Contenido cuando sidebar está colapsado */
+body.sidebar-collapsed .pe-content {
+    margin-left: 70px !important;
+}
