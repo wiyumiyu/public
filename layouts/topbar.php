@@ -36,7 +36,7 @@ $avatar = $_SESSION['user']['avatar'] ?? '../assets/images/avatar/avatar-10.jpg'
                 <div class="dropdown pe-dropdown-mega d-none d-md-block">
                     <button class="header-profile-btn btn gap-1 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="header-btn btn position-relative">
-                            <img src="assets/images/avatar/avatar-10.jpg" alt="Avatar Image" class="img-fluid rounded-circle">
+                            <img src="../assets/images/avatar/dummy_avatar.jpg" alt="Avatar Image" class="img-fluid rounded-circle">
                             <span class="position-absolute translate-middle badge border border-light rounded-circle bg-success"><span class="visually-hidden">unread messages</span></span>
                         </span>
                         <div class="d-none d-lg-block pe-2">

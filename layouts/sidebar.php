@@ -31,17 +31,17 @@
                     </li>
 
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-products-details" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/densidad_aparente/index.php" class="pe-nav-link">
                             Densidad Aparente
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-products-list" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/densidad_particulas/index.php" class="pe-nav-link">
                             Densidad de Partículas
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-add-products" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/porosidad_total/index.php" class="pe-nav-link">
                             Porosidad total
                         </a>
                     </li>
@@ -99,17 +99,17 @@
                         <a href="javascript:void(0)">Reportes y Gestión de Calidad</a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-invoice-list" class="pe-nav-link">
+                        <a href="/pages/controles/index.php" class="pe-nav-link">
                             Reporte de Controles
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-invoice-detail" class="pe-nav-link">
+                        <a href="/pages/resultados/index.php" class="pe-nav-link">
                             Reporte de Resultados
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-invoice-create" class="pe-nav-link">
+                        <a href="/pages/reporte/index.php" class="pe-nav-link">
                             Reportes de clientes
                         </a>
                     </li>
