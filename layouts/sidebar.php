@@ -2,13 +2,12 @@
 <aside class="pe-app-sidebar" id="sidebar">
     <div class="pe-app-sidebar-logo px-6 d-flex align-items-center position-relative">
         <!--begin::Brand Image-->
-        <a href="index" class="fs-18 fw-semibold">
-            <img height="30" class="pe-app-sidebar-logo-default d-none" alt="Logo" src="assets/images/logo-dark.png">
-            <img height="30" class="pe-app-sidebar-logo-light d-none" alt="Logo" src="assets/images/logo-light.png">
-            <img height="30" class="pe-app-sidebar-logo-minimize d-none" alt="Logo" src="assets/images/logo-md.png">
-            <img height="30" class="pe-app-sidebar-logo-minimize-light d-none" alt="Logo" src="assets/images/logo-md-light.png">
-            <!-- FabKin -->
-        </a>
+<a href="/pages/dashboard.php" class="fs-18 fw-semibold">
+    <img height="72" class="pe-app-sidebar-logo-default d-none" alt="Logo" src="/assets/images/logo/logorn.png">
+    <img height="72" class="pe-app-sidebar-logo-light d-none" alt="Logo" src="/assets/images/logo/logorn.png">
+    <img height="72" class="pe-app-sidebar-logo-minimize d-none" alt="Logo" src="/assets/images/logo/logorn.png">
+    <img height="72" class="pe-app-sidebar-logo-minimize-light d-none" alt="Logo" src="/assets/images/logo/logorn.png">
+</a>
         <!--end::Brand Image-->
     </div> 
     <nav class="pe-app-sidebar-menu nav nav-pills" data-simplebar id="sidebar-simplebar">
@@ -99,17 +98,17 @@
                         <a href="javascript:void(0)">Reportes y Gestión de Calidad</a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="/pages/controles/index.php" class="pe-nav-link">
+                        <a href="/pages/controles/listado.php" class="pe-nav-link">
                             Reporte de Controles
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="/pages/resultados/index.php" class="pe-nav-link">
+                        <a href="/pages/resultados/listado.php" class="pe-nav-link">
                             Reporte de Resultados
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="/pages/reporte/index.php" class="pe-nav-link">
+                        <a href="/pages/reporte/listado.php" class="pe-nav-link">
                             Reportes de clientes
                         </a>
                     </li>
@@ -127,12 +126,12 @@
                         <a href="javascript:void(0)">Administración</a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="auth-signin" class="pe-nav-link">
+                        <a href="/pages/usuarios/listado.php" class="pe-nav-link">
                             Usuario
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="auth-signup" class="pe-nav-link">
+                        <a href="/pages/bitacora/listado.php" class="pe-nav-link">
                             Bitácora
                         </a>
                     </li>
