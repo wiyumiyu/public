@@ -11,10 +11,18 @@ $breadcrumbs = $breadcrumbs ?? [];
 $content     = $content     ?? '';
 ?>
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="light">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <title><?= htmlspecialchars($pageTitle) ?></title>
+
+    <!-- 🔥 AÑADIR AQUÍ: aplicar el tema ANTES de cargar CSS -->
+    <script>
+    (() => {
+        const storedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-bs-theme', storedTheme);
+    })();
+    </script>
 
     <!-- CSS del template (Fabkin) -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
@@ -24,6 +32,7 @@ $content     = $content     ?? '';
     <link href="/assets/css/custom.css" rel="stylesheet">
     <link href="/assets/libs/simplebar/simplebar.min.css" rel="stylesheet">
 </head>
+
 
 <body class="bg-body">
 
@@ -62,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sidebar.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (trigger) {
         trigger.addEventListener('click', function (e) {
             // evitar que haga scroll al anchor
-            e.preventDefault();
+            e.spreventDefault();
 
             const selector = this.getAttribute('href') || this.getAttribute('data-bs-target');
             if (!selector) return;
@@ -111,8 +120,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
-
-
 
 </body>
 </html>
