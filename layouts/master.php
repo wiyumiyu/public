@@ -77,6 +77,42 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+<script>
+// ====== Mantener activo el menú actual y abrir el padre ======
+document.addEventListener("DOMContentLoaded", function () {
+    const currentUrl = window.location.pathname;
+
+    // Seleccionar todos los links del menú
+    document.querySelectorAll(".pe-slide-item a.pe-nav-link").forEach(link => {
+        const href = link.getAttribute("href");
+
+        // Ignorar vacíos o javascript:void
+        if (!href || href === "javascript:void(0)") return;
+
+        // Si la URL actual contiene el href del link → este es el activo
+        if (currentUrl.includes(href)) {
+
+            // 1. marcar hijo como activo
+            link.classList.add("active");
+
+            // 2. abrir menú padre
+            const parentMenu = link.closest(".pe-slide-menu");
+            if (parentMenu) {
+                parentMenu.classList.add("show"); // muestra el collapse
+            }
+
+            // 3. marcar el enlace del padre como activo y expandido
+            const parentTrigger = parentMenu?.previousElementSibling;
+            if (parentTrigger && parentTrigger.classList.contains("pe-nav-link")) {
+                parentTrigger.classList.add("active");
+                parentTrigger.setAttribute("aria-expanded", "true");
+            }
+        }
+    });
+});
+</script>
+
+
 
 </body>
 </html>
