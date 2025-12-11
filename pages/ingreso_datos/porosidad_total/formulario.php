@@ -64,21 +64,30 @@ ob_start();
         </div>
 
         <hr class="my-4">
+       <div class="mt-4 d-flex gap-2">
 
-        <!-- ============================= -->
-        <!--      BOTÓN DE GUARDAR         -->
-        <!-- ============================= -->
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-primary px-4">
-                Guardar datos
-            </button>
-        </div>
+           <!-- GUARDAR -->
+           <button type="submit" class="btn btn-primary px-4">
+               Guardar registro
+           </button>
 
-    </form>
+           <!-- REGRESAR AL LISTADO -->
+           <a href="/pages/ingreso_datos/textura/listado.php"
+              class="btn btn-outline-secondary px-4">
+               Regresar al listado
+           </a>
 
-</div>
+       </div>
+
+           </form>
+
+       </div>
 
 <?php
+// Cerramos el buffer y pasamos el contenido al layout
 $content = ob_get_clean();
+
+// OJO: estamos en public/pages/ingreso_datos/textura/
+// hay que subir 3 niveles para llegar a public/layouts/master.php
 include __DIR__ . '/../../../layouts/master.php';
 ?>

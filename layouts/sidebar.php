@@ -31,17 +31,17 @@
                     </li>
 
                     <li class="pe-slide-item">
-                        <a href="/pages/ingreso_datos/densidad_aparente/index.php" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/densidad_aparente/listado.php" class="pe-nav-link">
                             Densidad Aparente
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="/pages/ingreso_datos/densidad_particulas/index.php" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/densidad_particulas/listado.php" class="pe-nav-link">
                             Densidad de Partículas
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="/pages/ingreso_datos/porosidad_total/index.php" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/porosidad_total/listado.php" class="pe-nav-link">
                             Porosidad total
                         </a>
                     </li>
