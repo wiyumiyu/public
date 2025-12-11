@@ -25,7 +25,7 @@
                         <a href="javascript:void(0)">Ingreso de Datos</a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="/pages/ingreso_datos/textura/index.php" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/textura/listado.php" class="pe-nav-link">
                             Textura
                         </a>
                     </li>
