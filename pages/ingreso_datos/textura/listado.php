@@ -9,7 +9,7 @@ ob_start();
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold"><?= htmlspecialchars($pageTitle) ?></h1>
 
-        <a href="/pages/ingreso_datos/textura/index.php" class="btn btn-primary px-4">
+        <a href="/pages/ingreso_datos/textura/formulario.php" class="btn btn-primary px-4">
             + Nueva muestra
         </a>
     </div>
@@ -73,7 +73,7 @@ ob_start();
 
                             <!-- CÓDIGO -->
                             <td>
-                                <a href="/pages/ingreso_datos/textura/index.php?muestra=<?= urlencode($m['codigo']) ?>"
+                                <a href="/pages/ingreso_datos/textura/formulario.php?muestra=<?= urlencode($m['codigo']) ?>"
                                    class="fw-semibold"
                                    style="color: var(--bs-primary);">
                                    <?= htmlspecialchars($m['codigo']) ?>
@@ -92,7 +92,7 @@ ob_start();
                                 <div class="d-flex justify-content-center gap-2">
 
                                     <!-- EDITAR -->
-                                    <a href="/pages/ingreso_datos/textura/index.php?muestra=<?= urlencode($m['codigo']) ?>"
+                                    <a href="/pages/ingreso_datos/textura/formulario.php?muestra=<?= urlencode($m['codigo']) ?>"
                                        class="btn btn-sm"
                                        style="
                                            border: 1px solid #ff7c32;

@@ -123,9 +123,20 @@ ob_start();
 
         </div>
 
-        <div class="mt-4">
-            <button type="submit" class="btn btn-primary px-4">Guardar registro</button>
-        </div>
+ <div class="mt-4 d-flex gap-2">
+
+    <!-- GUARDAR -->
+    <button type="submit" class="btn btn-primary px-4">
+        Guardar registro
+    </button>
+
+    <!-- REGRESAR AL LISTADO -->
+    <a href="/pages/ingreso_datos/textura/listado.php"
+       class="btn btn-outline-secondary px-4">
+        Regresar al listado
+    </a>
+
+</div>
 
     </form>
 
