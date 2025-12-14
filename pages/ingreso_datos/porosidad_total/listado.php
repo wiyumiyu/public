@@ -9,32 +9,29 @@ ob_start();
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold"><?= htmlspecialchars($pageTitle) ?></h1>
 
-        <a href="/pages/ingreso_datos/porosidad_total/formulario.php" class="btn btn-primary px-4">
+        <a href="/pages/ingreso_datos/porosidad_total/formulario.php"
+           class="btn btn-primary px-4">
             + Nueva muestra
         </a>
     </div>
 
-    <!-- FILTER YEAR -->
+    <!-- FILTER -->
     <div class="mb-4 d-flex align-items-center gap-3">
         <label class="fw-semibold mb-0">Año:</label>
-        <select class="form-select w-auto" id="filtroAnio">
+        <select class="form-select w-auto">
             <option>2025</option>
             <option>2024</option>
-            <option>2023</option>
         </select>
     </div>
 
-    <!-- ======== FABKIN BASIC TABLE ======== -->
     <div class="card shadow-sm">
 
         <div class="card-header pb-2">
-            <!-- TITULO DE TABLA MÁS GRANDE -->
-            <h5 class="card-title mb-1 fw-bold fs-5">Listado de muestras registradas</h5>
-
-            <!-- DESCRIPCIÓN PARA POROSIDAD TOTAL -->
+            <h5 class="card-title mb-1 fw-bold fs-5">Ensayos registrados</h5>
             <div class="text-muted fs-13">
-                La porosidad total estima el porcentaje del volumen del suelo ocupado por aire y agua. 
-                Este registro agrupa las muestras evaluadas mediante densidades aparente y de partículas.
+                La porosidad total representa el porcentaje del volumen del suelo
+                ocupado por aire y agua, calculada a partir de la densidad aparente
+                y la densidad de partículas.
             </div>
         </div>
 
@@ -42,109 +39,84 @@ ob_start();
             <div class="table-responsive">
                 <table class="table align-middle table-hover mb-0">
 
-                    <!-- === HEADER ESTILO FABKIN CON TEXTO AGRANDADO === -->
                     <thead>
-                        <tr class="border-bottom" style="border-color: rgba(255,255,255,0.15);">
-
-                            <th class="text-muted fw-bold py-2" style="font-size: 0.9rem;">Código</th>
-                            <th class="text-muted fw-bold py-2" style="font-size: 0.9rem;">Fecha</th>
-                            <th class="text-muted fw-bold py-2" style="font-size: 0.9rem;">Analista</th>
-                            <th class="text-muted fw-bold text-center py-2" style="font-size: 0.9rem;">Acciones</th>
-
+                        <tr class="border-bottom">
+                            <th class="fw-bold text-muted">Código</th>
+                            <th class="fw-bold text-muted">Fecha</th>
+                            <th class="fw-bold text-muted">Analista</th>
+                            <th class="fw-bold text-muted text-center">Estado</th>
+                            <th class="fw-bold text-muted text-center">Acciones</th>
                         </tr>
                     </thead>
 
                     <tbody>
-
                         <?php
-                        // TEMPORAL — luego conectar a BD real
                         $muestras = [
-                            ["codigo" => "PT-25-001", "fecha" => "11/02/2025", "analista" => "Mariana Gómez"],
-                            ["codigo" => "PT-25-002", "fecha" => "16/02/2025", "analista" => "Freddy Blanco"],
-                            ["codigo" => "PT-25-003", "fecha" => "21/02/2025", "analista" => "Paula Hernández"],
+                            [
+                                "codigo"=>"PT-25-001",
+                                "fecha"=>"11/02/2025",
+                                "analista"=>"Mariana Gómez",
+                                "estado"=>"Finalizado"
+                            ],
+                            [
+                                "codigo"=>"PT-25-002",
+                                "fecha"=>"16/02/2025",
+                                "analista"=>"Freddy Blanco",
+                                "estado"=>"Borrador"
+                            ],
+                            [
+                                "codigo"=>"PT-25-003",
+                                "fecha"=>"21/02/2025",
+                                "analista"=>"Paula Hernández",
+                                "estado"=>"Borrador"
+                            ]
                         ];
 
                         foreach ($muestras as $m):
                         ?>
+                        <tr class="border-bottom">
 
-                        <!-- FILA estilo FabKin -->
-                        <tr class="border-bottom" style="border-color: rgba(255,255,255,0.07);">
-
-                            <!-- CÓDIGO -->
-                            <td>
-                                <a href="/pages/ingreso_datos/porosidad_total/formulario.php?muestra=<?= urlencode($m['codigo']) ?>"
-                                   class="fw-semibold"
-                                   style="color: var(--bs-primary);">
-                                   <?= htmlspecialchars($m['codigo']) ?>
-                                </a>
+                            <td class="fw-semibold text-primary">
+                                <?= $m['codigo'] ?>
                             </td>
 
-                            <!-- FECHA -->
-                            <td><?= htmlspecialchars($m['fecha']) ?></td>
+                            <td><?= $m['fecha'] ?></td>
+                            <td><?= $m['analista'] ?></td>
 
-                            <!-- ANALISTA -->
-                            <td><?= htmlspecialchars($m['analista']) ?></td>
-
-                            <!-- ACCIONES -->
                             <td class="text-center">
+                                <span class="badge <?= $m['estado']==='Finalizado'?'bg-success':'bg-warning text-dark' ?>">
+                                    <?= $m['estado'] ?>
+                                </span>
+                            </td>
 
+                            <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
 
                                     <!-- EDITAR -->
-                                    <a href="/pages/ingreso_datos/porosidad_total/formulario.php?muestra=<?= urlencode($m['codigo']) ?>"
-                                       class="btn btn-sm"
-                                       style="
-                                           border: 1px solid #ff7c32;
-                                           background-color: rgba(255, 124, 50, 0.10);
-                                           color: #ff7c32;
-                                           border-radius: 8px;
-                                           width: 38px;
-                                           height: 38px;
-                                           display: flex;
-                                           justify-content: center;
-                                           align-items: center;">
+                                    <a href="/pages/ingreso_datos/porosidad_total/formulario.php?muestra=<?= $m['codigo'] ?>"
+                                       class="btn btn-sm btn-outline-warning">
                                         <i class="bi bi-pencil"></i>
                                     </a>
 
                                     <!-- ELIMINAR -->
-                                    <button onclick="eliminarMuestra('<?= $m['codigo'] ?>')"
-                                            class="btn btn-sm"
-                                            style="
-                                                border: 1px solid #d9534f;
-                                                background-color: rgba(217, 83, 79, 0.12);
-                                                color: #d9534f;
-                                                border-radius: 8px;
-                                                width: 38px;
-                                                height: 38px;
-                                                display: flex;
-                                                justify-content: center;
-                                                align-items: center;">
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            <?= $m['estado']==='Finalizado'?'disabled':'' ?>>
                                         <i class="bi bi-trash"></i>
                                     </button>
 
                                 </div>
-
                             </td>
 
                         </tr>
-
                         <?php endforeach; ?>
-
                     </tbody>
+
                 </table>
             </div>
         </div>
 
     </div>
 </div>
-
-<script>
-function eliminarMuestra(codigo) {
-    if (confirm("¿Desea eliminar la muestra " + codigo + "?")) {
-        alert("Eliminar no implementado aún.");
-    }
-}
-</script>
 
 <?php
 $content = ob_get_clean();

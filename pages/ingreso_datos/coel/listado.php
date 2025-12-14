@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Muestras de Densidad de Partículas";
+$pageTitle = "Coeficiente de Extensibilidad Lineal (COEL)";
 ob_start();
 ?>
 
@@ -9,9 +9,9 @@ ob_start();
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold"><?= htmlspecialchars($pageTitle) ?></h1>
 
-        <a href="/pages/ingreso_datos/densidad_particulas/formulario.php"
+        <a href="/pages/ingreso_datos/coel/formulario.php"
            class="btn btn-primary px-4">
-            + Nueva muestra
+            + Nuevo ensayo
         </a>
     </div>
 
@@ -29,8 +29,8 @@ ob_start();
         <div class="card-header pb-2">
             <h5 class="card-title mb-1 fw-bold fs-5">Ensayos registrados</h5>
             <div class="text-muted fs-13">
-                La densidad de partículas representa la relación entre la masa de los sólidos
-                del suelo y su volumen real, determinada mediante el método del matraz volumétrico.
+                Determinación del coeficiente de extensibilidad lineal del suelo
+                para evaluar su comportamiento expansivo al secarse.
             </div>
         </div>
 
@@ -42,7 +42,10 @@ ob_start();
                         <tr class="border-bottom">
                             <th class="fw-bold text-muted">Código</th>
                             <th class="fw-bold text-muted">Fecha</th>
+                            <th class="fw-bold text-muted">Método</th>
                             <th class="fw-bold text-muted">Analista</th>
+                            <th class="fw-bold text-muted text-center">COEL (%)</th>
+                            <th class="fw-bold text-muted text-center">Clasificación</th>
                             <th class="fw-bold text-muted text-center">Estado</th>
                             <th class="fw-bold text-muted text-center">Acciones</th>
                         </tr>
@@ -50,62 +53,61 @@ ob_start();
 
                     <tbody>
                         <?php
-                        $muestras = [
+                        $ensayos = [
                             [
-                                "codigo"=>"DP-25-001",
-                                "fecha"=>"09/02/2025",
-                                "analista"=>"Mariana Gómez",
+                                "codigo"=>"COEL-25-001",
+                                "fecha"=>"18/02/2025",
+                                "metodo"=>"Cilindro",
+                                "analista"=>"Freddy Blanco",
+                                "coel"=>4.8,
+                                "clasificacion"=>"Moderadamente expansivo",
                                 "estado"=>"Finalizado"
                             ],
                             [
-                                "codigo"=>"DP-25-002",
-                                "fecha"=>"14/02/2025",
-                                "analista"=>"Freddy Blanco",
-                                "estado"=>"Borrador"
-                            ],
-                            [
-                                "codigo"=>"DP-25-003",
-                                "fecha"=>"19/02/2025",
-                                "analista"=>"Paula Hernández",
+                                "codigo"=>"COEL-25-002",
+                                "fecha"=>"22/02/2025",
+                                "metodo"=>"Varilla",
+                                "analista"=>"María Rojas",
+                                "coel"=>null,
+                                "clasificacion"=>null,
                                 "estado"=>"Borrador"
                             ]
                         ];
 
-                        foreach ($muestras as $m):
+                        foreach ($ensayos as $e):
                         ?>
                         <tr class="border-bottom">
-
-                            <td class="fw-semibold text-primary">
-                                <?= $m['codigo'] ?>
-                            </td>
-
-                            <td><?= $m['fecha'] ?></td>
-                            <td><?= $m['analista'] ?></td>
+                            <td class="fw-semibold text-primary"><?= $e['codigo'] ?></td>
+                            <td><?= $e['fecha'] ?></td>
+                            <td><?= $e['metodo'] ?></td>
+                            <td><?= $e['analista'] ?></td>
 
                             <td class="text-center">
-                                <span class="badge <?= $m['estado']==='Finalizado'?'bg-success':'bg-warning text-dark' ?>">
-                                    <?= $m['estado'] ?>
+                                <?= $e['coel'] !== null ? $e['coel'].'%' : '—' ?>
+                            </td>
+
+                            <td class="text-center">
+                                <?= $e['clasificacion'] ?? '—' ?>
+                            </td>
+
+                            <td class="text-center">
+                                <span class="badge <?= $e['estado']==='Finalizado'?'bg-success':'bg-warning text-dark' ?>">
+                                    <?= $e['estado'] ?>
                                 </span>
                             </td>
 
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
-
-                                    <!-- EDITAR -->
-                                    <a href="/pages/ingreso_datos/densidad_particulas/formulario.php?muestra=<?= $m['codigo'] ?>"
+                                    <a href="/pages/ingreso_datos/coel/formulario.php?ensayo=<?= $e['codigo'] ?>"
                                        class="btn btn-sm btn-outline-warning">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-
-                                    <!-- ELIMINAR -->
                                     <button class="btn btn-sm btn-outline-danger"
-                                            <?= $m['estado']==='Finalizado'?'disabled':'' ?>>
+                                            <?= $e['estado']==='Finalizado'?'disabled':'' ?>>
                                         <i class="bi bi-trash"></i>
                                     </button>
-
                                 </div>
                             </td>
-
                         </tr>
                         <?php endforeach; ?>
                     </tbody>

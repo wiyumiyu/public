@@ -114,3 +114,40 @@ body.sidebar-collapsed .app-header {
 body.sidebar-collapsed .pe-content {
     margin-left: 70px !important;
 }
+
+
+/* ===============================
+   BOTONES DE ACCIÓN EN TABLAS
+   =============================== */
+/*
+.btn-action {
+    width: 38px;
+    height: 38px;
+    padding: 0 !important;
+    min-width: 38px;
+    min-height: 38px;
+}
+
+ Editar 
+.btn-action-edit {
+    border: 1px solid #ff7c32;
+    background-color: rgba(255, 124, 50, 0.10);
+    color: #ff7c32;
+}
+
+.btn-action-edit:hover {
+    background-color: rgba(255, 124, 50, 0.20);
+    color: #ff7c32;
+}
+
+ Eliminar 
+.btn-action-delete {
+    border: 1px solid #d9534f;
+    background-color: rgba(217, 83, 79, 0.12);
+    color: #d9534f;
+}
+
+.btn-action-delete:hover {
+    background-color: rgba(217, 83, 79, 0.25);
+    color: #d9534f;
+}*/

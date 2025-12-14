@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Muestras de Densidad de Partículas";
+$pageTitle = "Ensayos de Conductividad Hidráulica";
 ob_start();
 ?>
 
@@ -9,9 +9,9 @@ ob_start();
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold"><?= htmlspecialchars($pageTitle) ?></h1>
 
-        <a href="/pages/ingreso_datos/densidad_particulas/formulario.php"
+        <a href="/pages/ingreso_datos/conductividad_hidraulica/formulario.php"
            class="btn btn-primary px-4">
-            + Nueva muestra
+            + Nuevo ensayo
         </a>
     </div>
 
@@ -29,8 +29,8 @@ ob_start();
         <div class="card-header pb-2">
             <h5 class="card-title mb-1 fw-bold fs-5">Ensayos registrados</h5>
             <div class="text-muted fs-13">
-                La densidad de partículas representa la relación entre la masa de los sólidos
-                del suelo y su volumen real, determinada mediante el método del matraz volumétrico.
+                Registro de ensayos de conductividad hidráulica del suelo realizados
+                mediante métodos de carga constante, carga variable u otros permeámetros.
             </div>
         </div>
 
@@ -42,6 +42,7 @@ ob_start();
                         <tr class="border-bottom">
                             <th class="fw-bold text-muted">Código</th>
                             <th class="fw-bold text-muted">Fecha</th>
+                            <th class="fw-bold text-muted">Método</th>
                             <th class="fw-bold text-muted">Analista</th>
                             <th class="fw-bold text-muted text-center">Estado</th>
                             <th class="fw-bold text-muted text-center">Acciones</th>
@@ -50,41 +51,38 @@ ob_start();
 
                     <tbody>
                         <?php
-                        $muestras = [
+                        $ensayos = [
                             [
-                                "codigo"=>"DP-25-001",
-                                "fecha"=>"09/02/2025",
-                                "analista"=>"Mariana Gómez",
+                                "codigo"=>"CH-25-001",
+                                "fecha"=>"12/02/2025",
+                                "metodo"=>"Carga constante",
+                                "analista"=>"María Rojas",
                                 "estado"=>"Finalizado"
                             ],
                             [
-                                "codigo"=>"DP-25-002",
-                                "fecha"=>"14/02/2025",
+                                "codigo"=>"CH-25-002",
+                                "fecha"=>"18/02/2025",
+                                "metodo"=>"Carga variable",
                                 "analista"=>"Freddy Blanco",
                                 "estado"=>"Borrador"
                             ],
-                            [
-                                "codigo"=>"DP-25-003",
-                                "fecha"=>"19/02/2025",
-                                "analista"=>"Paula Hernández",
-                                "estado"=>"Borrador"
-                            ]
                         ];
 
-                        foreach ($muestras as $m):
+                        foreach ($ensayos as $e):
                         ?>
                         <tr class="border-bottom">
 
                             <td class="fw-semibold text-primary">
-                                <?= $m['codigo'] ?>
+                                <?= $e['codigo'] ?>
                             </td>
 
-                            <td><?= $m['fecha'] ?></td>
-                            <td><?= $m['analista'] ?></td>
+                            <td><?= $e['fecha'] ?></td>
+                            <td><?= $e['metodo'] ?></td>
+                            <td><?= $e['analista'] ?></td>
 
                             <td class="text-center">
-                                <span class="badge <?= $m['estado']==='Finalizado'?'bg-success':'bg-warning text-dark' ?>">
-                                    <?= $m['estado'] ?>
+                                <span class="badge <?= $e['estado']==='Finalizado'?'bg-success':'bg-warning text-dark' ?>">
+                                    <?= $e['estado'] ?>
                                 </span>
                             </td>
 
@@ -92,14 +90,14 @@ ob_start();
                                 <div class="d-flex justify-content-center gap-2">
 
                                     <!-- EDITAR -->
-                                    <a href="/pages/ingreso_datos/densidad_particulas/formulario.php?muestra=<?= $m['codigo'] ?>"
+                                    <a href="/pages/ingreso_datos/conductividad_hidraulica/formulario.php?ensayo=<?= $e['codigo'] ?>"
                                        class="btn btn-sm btn-outline-warning">
                                         <i class="bi bi-pencil"></i>
                                     </a>
 
                                     <!-- ELIMINAR -->
                                     <button class="btn btn-sm btn-outline-danger"
-                                            <?= $m['estado']==='Finalizado'?'disabled':'' ?>>
+                                            <?= $e['estado']==='Finalizado'?'disabled':'' ?>>
                                         <i class="bi bi-trash"></i>
                                     </button>
 

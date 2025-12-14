@@ -67,7 +67,7 @@ $avatar = $_SESSION['user']['avatar'] ?? '/assets/images/avatar/avatar-10.jpg';
                         <!-- HEADER DEL PERFIL -->
                         <div class="border-bottom pb-2 mb-2 d-flex align-items-center gap-2">
 
-                            <img src="<?= $avatar ?>"
+                            <img src="/assets/images/avatar/dummy_avatar.jpg"
                                  class="rounded-circle header-profile-user"
                                  alt="user-image"
                                  width="35" height="35">

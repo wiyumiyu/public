@@ -70,8 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     sidebar.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (trigger) {
         trigger.addEventListener('click', function (e) {
-            // evitar que haga scroll al anchor
-            e.spreventDefault();
+            e.preventDefault(); // ✅ corregido
 
             const selector = this.getAttribute('href') || this.getAttribute('data-bs-target');
             if (!selector) return;
@@ -79,7 +78,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const target = document.querySelector(selector);
             if (!target) return;
 
-            const instance = bootstrap.Collapse.getOrCreateInstance(target);
+            const instance = bootstrap.Collapse.getOrCreateInstance(target, {
+                toggle: false // 👈 CLAVE
+            });
+
             instance.toggle();
         });
     });
@@ -99,7 +101,33 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!href || href === "javascript:void(0)") return;
 
         // Si la URL actual contiene el href del link → este es el activo
-        if (currentUrl.includes(href)) {
+if (
+    currentUrl === href ||
+    (href.includes("/pages/ingreso_datos/textura") &&
+     currentUrl.includes("/pages/ingreso_datos/textura/")) ||
+    (href.includes("/pages/ingreso_datos/densidad_aparente") &&
+     currentUrl.includes("/pages/ingreso_datos/densidad_aparente/")) ||
+    (href.includes("/pages/ingreso_datos/densidad_particulas") &&
+     currentUrl.includes("/pages/ingreso_datos/densidad_particulas/")) ||
+    (href.includes("/pages/ingreso_datos/porosidad_total") &&
+     currentUrl.includes("/pages/ingreso_datos/porosidad_total/")) ||
+    (href.includes("/pages/ingreso_datos/conductividad_hidraulica") &&
+     currentUrl.includes("/pages/ingreso_datos/conductividad_hidraulica/"))||
+    (href.includes("/pages/ingreso_datos/humedad_gravimetrica") &&
+     currentUrl.includes("/pages/ingreso_datos/humedad_gravimetrica/")) || 
+    (href.includes("/pages/ingreso_datos/retencion_humedad") &&
+     currentUrl.includes("/pages/ingreso_datos/retencion_humedad/")) || 
+    (href.includes("/pages/ingreso_datos/curvatura_retencion") &&
+     currentUrl.includes("/pages/ingreso_datos/curvatura_retencion/")) || 
+    (href.includes("/pages/ingreso_datos/granulometria_gruesa") &&
+     currentUrl.includes("/pages/ingreso_datos/granulometria_gruesa/")) || 
+    (href.includes("/pages/ingreso_datos/estabilidad_agregados") &&
+     currentUrl.includes("/pages/ingreso_datos/estabilidad_agregados/"))  || 
+    (href.includes("/pages/ingreso_datos/coel") &&
+     currentUrl.includes("/pages/ingreso_datos/coel/")) || 
+    (href.includes("/pages/ingreso_datos/permeabilidad_aire") &&
+     currentUrl.includes("/pages/ingreso_datos/permeabilidad_aire/"))                
+) {
 
             // 1. marcar hijo como activo
             link.classList.add("active");

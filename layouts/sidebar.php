@@ -45,43 +45,43 @@
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-order-details" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/humedad_gravimetrica/listado.php" class="pe-nav-link">
                             Humedad Gravimétrica
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-order" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/conductividad_hidraulica/listado.php" class="pe-nav-link">
                             Conductividad Hidráulica
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-cart" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/retencion_humedad/listado.php" class="pe-nav-link">
                             Retención de humedad
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-checkout" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/curvatura_retencion/listado.php" class="pe-nav-link">
+                            Curvatura de Retención de Humedad
+                        </a>
+                    </li>                    
+                    <li class="pe-slide-item">
+                        <a href="/pages/ingreso_datos/granulometria_gruesa/listado.php" class="pe-nav-link">
                             Granulometría de la fracción gruesa
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-wishlist" class="pe-nav-link">
-                            Curvatura de Retención de Humedad
-                        </a>
-                    </li>
-                    <li class="pe-slide-item">
-                        <a href="apps-ecommerce-wishlist" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/estabilidad_agregados/listado.php" class="pe-nav-link">
                             Estabilidad de agregados
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-wishlist" class="pe-nav-link">
+                        <a href="/pages/ingreso_datos/coel/listado.php" class="pe-nav-link">
                             Coeficiente de extensibilidad lineal (COEL)
                         </a>
                     </li>
                     <li class="pe-slide-item">
-                        <a href="apps-ecommerce-wishlist" class="pe-nav-link">
-                            Curvatura de Retención de Humedad
+                        <a href="/pages/ingreso_datos/permeabilidad_aire/listado.php" class="pe-nav-link">
+                           Permeabilidad del aire
                         </a>
                     </li>
                 </ul>
