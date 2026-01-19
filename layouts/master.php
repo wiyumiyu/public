@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/roles.php';
 
 if (!isLoggedIn()) {
     header("Location: /login.php");

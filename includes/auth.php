@@ -30,7 +30,7 @@ function login($correo, $password) {
     // Roles
     $_SESSION['roles'] = [];
     foreach ($rows as $row) {
-        if (!empty($row['rol_nombre'])) {
+        if (!empty($row['rol_nombre']) && !in_array($row['rol_nombre'], $_SESSION['roles'])) {
             $_SESSION['roles'][] = $row['rol_nombre'];
         }
     }

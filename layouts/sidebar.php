@@ -115,6 +115,7 @@
                 </ul>
             </li>
 
+            <?php if (isAdmin()): ?>
             <li class="pe-slide pe-has-sub">
                 <a href="#collapseAuth" class="pe-nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseAuth">
                     <i class="bi bi-person pe-nav-icon"></i>
@@ -137,6 +138,7 @@
                     </li>
                 </ul>
             </li>
+            <?php endif; ?>
         </ul>
     </nav>
 </aside>
