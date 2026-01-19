@@ -102,6 +102,96 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `tbl_persona` (
+  `id_persona` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `apellido1` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `apellido2` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_persona_grado_academico` INT NOT NULL DEFAULT 0,
+  `cedula` VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fecha_nacimiento` DATE NOT NULL,
+  `contrasena` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_estado` INT NOT NULL DEFAULT 0,
+  `imagen` TEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  `creado_en` DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  `actualizado_en` DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  PRIMARY KEY (`id_persona`)
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `trn_roles` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `trn_persona_roles` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_persona` INT UNSIGNED NOT NULL,
+  `rol_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_persona_rol` (`id_persona`, `rol_id`)
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE trn_persona_roles
+ADD CONSTRAINT fk_persona_roles_persona
+FOREIGN KEY (id_persona)
+REFERENCES tbl_persona(id_persona)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+ALTER TABLE trn_persona_roles
+ADD CONSTRAINT fk_persona_roles_roles
+FOREIGN KEY (rol_id)
+REFERENCES trn_roles(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+
+CREATE TABLE `tbl_persona_correo` (
+  `id_persona_correo` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_persona` INT UNSIGNED NOT NULL,
+  `correo` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id_persona_correo`)
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
+
+-- ---------------------------------------------------------------------------------------------------------------------------------------------
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_login_persona (
+    IN p_correo VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+)
+BEGIN
+    SELECT
+        p.id_persona,
+        p.nombre,
+        p.apellido1,
+        p.apellido2,
+        p.contrasena,
+        r.nombre AS rol_nombre
+    FROM tbl_persona p
+    INNER JOIN tbl_persona_correo pc 
+        ON pc.id_persona = p.id_persona
+    LEFT JOIN trn_persona_roles pr 
+        ON pr.id_persona = p.id_persona
+    LEFT JOIN trn_roles r 
+        ON r.id = pr.rol_id
+    WHERE pc.correo = p_correo
+      AND p.id_estado = 1;
+END $$
+
+DELIMITER ;
+
 
 INSERT INTO `analisysbd`.`migrations`
 (`id`, `migration`, `batch`) VALUES 
@@ -117,14 +207,51 @@ INSERT INTO `analisysbd`.`migrations`
 
 -- ---------------------------------------------------------------------------------------------------------------------------------------------
 
+INSERT INTO trn_roles (nombre, descripcion)
+VALUES ('ADMIN', 'Administrador del sistema');
 
-
-INSERT INTO users (name, email, password, created_at)
-VALUES (
+INSERT INTO tbl_persona (
+  nombre,
+  apellido1,
+  apellido2,
+  id_persona_grado_academico,
+  cedula,
+  fecha_nacimiento,
+  contrasena,
+  id_estado,
+  imagen,
+  creado_en,
+  actualizado_en
+) VALUES (
   'Administrador',
-  'admin@analisys.lab',
+  'Sistema',
+  'Principal',
+  0,
+  'ADMIN-001',
+  '1990-01-01',
   '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq', -- hash de '1234'
-    NOW()
+  1,
+  '',
+  CURDATE(),
+  CURDATE()
+);
+
+INSERT INTO tbl_persona_correo (
+  id_persona,
+  correo,
+  descripcion
+) VALUES (
+  1,
+  'admin@analisys.lab',
+  'principal'
+);
+
+INSERT INTO trn_persona_roles (
+  id_persona,
+  rol_id
+) VALUES (
+  1,
+  1
 );
 
 -- UPDATE users 

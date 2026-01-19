@@ -2,25 +2,45 @@
 session_start();
 require_once 'config.php';
 
-function login($email, $password) {
+function login($correo, $password) {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare("CALL sp_login_persona(:correo)");
+    $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+    $stmt->execute();
 
-    if ($user && password_verify($password, $user['password'])) {
-     
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
-        return true;
-    } else {
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    if (!$rows) {
         return false;
     }
+
+    $user = $rows[0];
+
+    if (!password_verify($password, $user['contrasena'])) {
+        return false;
+    }
+
+    // Datos base
+    $_SESSION['id_persona'] = $user['id_persona'];
+    $_SESSION['nombre'] = $user['nombre'];
+    $_SESSION['apellido1'] = $user['apellido1'];
+
+    // Roles
+    $_SESSION['roles'] = [];
+    foreach ($rows as $row) {
+        if (!empty($row['rol_nombre'])) {
+            $_SESSION['roles'][] = $row['rol_nombre'];
+        }
+    }
+
+    return true;
 }
 
+
 function isLoggedIn() {
-    return isset($_SESSION['user_id']);
+    return isset($_SESSION['id_persona']);
 }
 
 function logout() {
