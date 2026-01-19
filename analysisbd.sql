@@ -1,3 +1,13 @@
+/* =====================================================================
+   SISTEMA: ANALISYSBD
+   DESCRIPCIÓN:
+   Base de datos para gestión de u
+   ===================================================================== */
+
+/* ============================================================
+   1. ADMINISTRACIÓN DE BASE DE DATOS
+   ============================================================ */
+
 CREATE DATABASE IF NOT EXISTS analisysbd
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_0900_ai_ci;
@@ -8,6 +18,10 @@ USE analisysbd;
 
 GRANT ALL PRIVILEGES ON analisysbd.* TO 'sysusuario'@'%';
 FLUSH PRIVILEGES;
+
+/* ============================================================
+   2. TABLAS DE INFRAESTRUCTURA / SISTEMA
+   ============================================================ */
 
 CREATE TABLE `cache` (
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -23,7 +37,6 @@ CREATE TABLE `cache_locks` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
 CREATE TABLE `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -35,7 +48,6 @@ CREATE TABLE `failed_jobs` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 CREATE TABLE `job_batches` (
   `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -91,7 +103,9 @@ CREATE TABLE `sessions` (
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-----------------------------------------------------------------------------------------------------------------------------------------------
+/* ============================================================
+   3. TABLAS DE DOMINIO 
+   ============================================================ */
 
 CREATE TABLE tbl_persona (
   id_persona INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -117,11 +131,6 @@ CREATE TABLE trn_roles (
   PRIMARY KEY (id),
   UNIQUE KEY uk_roles_nombre (nombre)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-
-
-
 
 CREATE TABLE trn_persona_roles (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -156,7 +165,9 @@ CREATE TABLE trn_persona_telefono (
   UNIQUE KEY uk_persona_telefono (id_persona, telefono)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
+/* ============================================================
+   4. RELACIONES (FOREIGN KEYS)
+   ============================================================ */
 
 ALTER TABLE trn_persona_roles
 ADD CONSTRAINT fk_persona_roles_persona
@@ -193,13 +204,16 @@ REFERENCES cat_telefono_tipo(id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
+/* ============================================================
+   5. PROCEDIMIENTOS ALMACENADOS
+   ============================================================ */
 
--- ---------------------------------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
 
 /* ============================================================
-   LOGIN
+   5.1 AUTENTICACIÓN
    ============================================================ */
+
 CREATE PROCEDURE sp_login_persona (
     IN p_correo VARCHAR(100)
 )
@@ -218,13 +232,14 @@ BEGIN
         ON pr.id_persona = p.id_persona
     LEFT JOIN trn_roles r
         ON r.id = pr.rol_id
-    WHERE pc.correo = p_correo
+    WHERE pc.correo = p_correo COLLATE utf8mb4_unicode_ci
       AND p.id_estado = 1;
 END $$
 
 /* ============================================================
-   LISTADO DE USUARIOS
+   5.2 PERSONAS – LECTURA
    ============================================================ */
+
 CREATE PROCEDURE sp_listado_usuarios ()
 BEGIN
     SELECT
@@ -241,9 +256,25 @@ BEGIN
     ORDER BY p.nombre, p.apellido1;
 END $$
 
+CREATE PROCEDURE sp_obtener_persona (
+    IN p_id_persona INT UNSIGNED
+)
+BEGIN
+    SELECT
+        id_persona,
+        nombre,
+        apellido1,
+        apellido2,
+        cedula,
+        id_estado
+    FROM tbl_persona
+    WHERE id_persona = p_id_persona;
+END;
+
 /* ============================================================
-   CREAR PERSONA
+   5.3 PERSONAS – ESCRITURA
    ============================================================ */
+
 CREATE PROCEDURE sp_crear_persona (
     IN p_nombre VARCHAR(50),
     IN p_apellido1 VARCHAR(50),
@@ -283,8 +314,21 @@ BEGIN
 END $$
 
 /* ============================================================
-   EDITAR PERSONA
+   5.4 PERSONAS – ESTADO / SEGURIDAD
    ============================================================ */
+
+CREATE PROCEDURE sp_actualizar_estado_persona (
+    IN p_id_persona INT UNSIGNED,
+    IN p_estado INT
+)
+BEGIN
+    UPDATE tbl_persona
+    SET
+        id_estado = p_estado,
+        actualizado_en = CURRENT_TIMESTAMP
+    WHERE id_persona = p_id_persona;
+END $$
+
 CREATE PROCEDURE sp_editar_persona (
     IN p_id_persona INT UNSIGNED,
     IN p_nombre VARCHAR(50),
@@ -309,9 +353,6 @@ BEGIN
     WHERE id_persona = p_id_persona;
 END $$
 
-/* ============================================================
-   ELIMINAR (INACTIVAR) PERSONA
-   ============================================================ */
 CREATE PROCEDURE sp_eliminar_persona (
     IN p_id_persona INT UNSIGNED
 )
@@ -323,9 +364,6 @@ BEGIN
     WHERE id_persona = p_id_persona;
 END $$
 
-/* ============================================================
-   ACTUALIZAR CONTRASEÑA
-   ============================================================ */
 CREATE PROCEDURE sp_actualizar_contrasena (
     IN p_id_persona INT UNSIGNED,
     IN p_contrasena VARCHAR(255)
@@ -339,8 +377,9 @@ BEGIN
 END $$
 
 /* ============================================================
-   CORREOS
+   5.5 PERSONAS – CORREOS
    ============================================================ */
+
 CREATE PROCEDURE sp_agregar_persona_correo (
     IN p_id_persona INT UNSIGNED,
     IN p_correo VARCHAR(100),
@@ -359,9 +398,23 @@ BEGIN
     WHERE id = p_id;
 END $$
 
+CREATE PROCEDURE sp_listar_correos_persona (
+    IN p_id_persona INT UNSIGNED
+)
+BEGIN
+    SELECT
+        id,
+        correo,
+        descripcion
+    FROM trn_persona_correo
+    WHERE id_persona = p_id_persona;
+END;
+
+
 /* ============================================================
-   TELÉFONOS
+   5.6 PERSONAS – TELÉFONOS
    ============================================================ */
+
 CREATE PROCEDURE sp_agregar_persona_telefono (
     IN p_id_persona INT UNSIGNED,
     IN p_id_telefono_tipo INT UNSIGNED,
@@ -393,9 +446,34 @@ BEGIN
     WHERE id = p_id;
 END $$
 
-DELIMITER ;
+DELIMITER $$;
+
+CREATE PROCEDURE sp_listar_telefonos_persona (
+    IN p_id_persona INT UNSIGNED
+)
+BEGIN
+    SELECT
+        t.id,
+        t.telefono,
+        t.id_telefono_tipo,
+        tt.nombre AS tipo
+    FROM trn_persona_telefono t
+    JOIN cat_telefono_tipo tt ON tt.id = t.id_telefono_tipo
+    WHERE t.id_persona = p_id_persona;
+END;
+
+CREATE PROCEDURE sp_listar_tipos_telefono ()
+BEGIN
+    SELECT id, nombre
+    FROM cat_telefono_tipo
+    ORDER BY nombre;
+END;
 
 
+/* ============================================================
+   6. DATOS INICIALES
+   ============================================================ */
+   
 INSERT INTO `analisysbd`.`migrations`
 (`id`, `migration`, `batch`) VALUES 
 (1, '001_01_01_000000_create_users_table', 1);
@@ -408,12 +486,20 @@ INSERT INTO `analisysbd`.`migrations`
 (`id`, `migration`, `batch`) VALUES 
 (3, '0001_01_01_000002_create_jobs_table', 1);
 
--- ---------------------------------------------------------------------------------------------------------------------------------------------
-
+/* ============================================================
+   6. Inserciones
+   ============================================================ */
+   
 INSERT INTO trn_roles (nombre, descripcion)
 VALUES
   ('ADMIN', 'Administrador del sistema'),
   ('ANALISTA', 'Analista del sistema');
+
+INSERT INTO cat_telefono_tipo (nombre) VALUES
+('Móvil'),
+('Casa'),
+('Trabajo'),
+('Otro');
 
 INSERT INTO tbl_persona (
   nombre,
