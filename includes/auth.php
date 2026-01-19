@@ -34,7 +34,6 @@ function login($correo, $password) {
             $_SESSION['roles'][] = $row['rol_nombre'];
         }
     }
-
     return true;
 }
 
