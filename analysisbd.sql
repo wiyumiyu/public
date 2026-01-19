@@ -91,42 +91,72 @@ CREATE TABLE `sessions` (
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `tbl_persona` (
-  `id_persona` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `apellido1` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `apellido2` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `id_persona_grado_academico` INT NOT NULL DEFAULT 0,
-  `cedula` VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fecha_nacimiento` DATE NOT NULL,
-  `contrasena` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `id_estado` INT NOT NULL DEFAULT 0,
-  `imagen` TEXT COLLATE utf8mb4_unicode_ci NOT NULL,
-  `creado_en` DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-  `actualizado_en` DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-  PRIMARY KEY (`id_persona`)
-) ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_unicode_ci;
+----------------------------------------------------------------------------------------------------------------------------------------------
 
-CREATE TABLE `trn_roles` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE tbl_persona (
+  id_persona INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  apellido1 VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  apellido2 VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  id_persona_grado_academico INT NOT NULL DEFAULT 0,
+  cedula VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  fecha_nacimiento DATE NOT NULL,
+  contrasena VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  id_estado INT NOT NULL DEFAULT 1,
+  imagen TEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  actualizado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_persona),
+  UNIQUE KEY uk_persona_cedula (cedula)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `trn_persona_roles` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_persona` INT UNSIGNED NOT NULL,
-  `rol_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_persona_rol` (`id_persona`, `rol_id`)
-) ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE trn_roles (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  descripcion VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_roles_nombre (nombre)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+
+
+
+CREATE TABLE trn_persona_roles (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  id_persona INT UNSIGNED NOT NULL,
+  rol_id INT UNSIGNED NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_persona_rol (id_persona, rol_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE trn_persona_correo (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  id_persona INT UNSIGNED NOT NULL,
+  correo VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  descripcion VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_persona_correo (id_persona, correo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE cat_telefono_tipo (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_tipo_telefono (nombre)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE trn_persona_telefono (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  id_persona INT UNSIGNED NOT NULL,
+  id_telefono_tipo INT UNSIGNED NOT NULL,
+  telefono VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_persona_telefono (id_persona, telefono)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 
 ALTER TABLE trn_persona_roles
 ADD CONSTRAINT fk_persona_roles_persona
@@ -142,23 +172,36 @@ REFERENCES trn_roles(id)
 ON DELETE CASCADE
 ON UPDATE CASCADE;
 
+ALTER TABLE trn_persona_correo
+ADD CONSTRAINT fk_persona_correo_persona
+FOREIGN KEY (id_persona)
+REFERENCES tbl_persona(id_persona)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
-CREATE TABLE `tbl_persona_correo` (
-  `id_persona_correo` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_persona` INT UNSIGNED NOT NULL,
-  `correo` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id_persona_correo`)
-) ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_unicode_ci;
+ALTER TABLE trn_persona_telefono
+ADD CONSTRAINT fk_persona_telefono_persona
+FOREIGN KEY (id_persona)
+REFERENCES tbl_persona(id_persona)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+ALTER TABLE trn_persona_telefono
+ADD CONSTRAINT fk_persona_telefono_tipo
+FOREIGN KEY (id_telefono_tipo)
+REFERENCES cat_telefono_tipo(id)
+ON DELETE RESTRICT
+ON UPDATE CASCADE;
+
 
 -- ---------------------------------------------------------------------------------------------------------------------------------------------
-
 DELIMITER $$
 
+/* ============================================================
+   LOGIN
+   ============================================================ */
 CREATE PROCEDURE sp_login_persona (
-    IN p_correo VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+    IN p_correo VARCHAR(100)
 )
 BEGIN
     SELECT
@@ -169,14 +212,185 @@ BEGIN
         p.contrasena,
         r.nombre AS rol_nombre
     FROM tbl_persona p
-    INNER JOIN tbl_persona_correo pc 
+    INNER JOIN trn_persona_correo pc
         ON pc.id_persona = p.id_persona
-    LEFT JOIN trn_persona_roles pr 
+    LEFT JOIN trn_persona_roles pr
         ON pr.id_persona = p.id_persona
-    LEFT JOIN trn_roles r 
+    LEFT JOIN trn_roles r
         ON r.id = pr.rol_id
     WHERE pc.correo = p_correo
       AND p.id_estado = 1;
+END $$
+
+/* ============================================================
+   LISTADO DE USUARIOS
+   ============================================================ */
+CREATE PROCEDURE sp_listado_usuarios ()
+BEGIN
+    SELECT
+        p.id_persona,
+        CONCAT(p.nombre, ' ', p.apellido1, ' ', p.apellido2) AS nombre_completo,
+        p.cedula,
+        p.id_estado,
+        r.nombre AS rol
+    FROM tbl_persona p
+    LEFT JOIN trn_persona_roles pr
+        ON pr.id_persona = p.id_persona
+    LEFT JOIN trn_roles r
+        ON r.id = pr.rol_id
+    ORDER BY p.nombre, p.apellido1;
+END $$
+
+/* ============================================================
+   CREAR PERSONA
+   ============================================================ */
+CREATE PROCEDURE sp_crear_persona (
+    IN p_nombre VARCHAR(50),
+    IN p_apellido1 VARCHAR(50),
+    IN p_apellido2 VARCHAR(50),
+    IN p_id_persona_grado_academico INT,
+    IN p_cedula VARCHAR(20),
+    IN p_fecha_nacimiento DATE,
+    IN p_contrasena VARCHAR(255),
+    IN p_imagen TEXT
+)
+BEGIN
+    INSERT INTO tbl_persona (
+        nombre,
+        apellido1,
+        apellido2,
+        id_persona_grado_academico,
+        cedula,
+        fecha_nacimiento,
+        contrasena,
+        id_estado,
+        imagen,
+        creado_en,
+        actualizado_en
+    ) VALUES (
+        p_nombre,
+        p_apellido1,
+        p_apellido2,
+        p_id_persona_grado_academico,
+        p_cedula,
+        p_fecha_nacimiento,
+        p_contrasena,
+        1,
+        p_imagen,
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP
+    );
+END $$
+
+/* ============================================================
+   EDITAR PERSONA
+   ============================================================ */
+CREATE PROCEDURE sp_editar_persona (
+    IN p_id_persona INT UNSIGNED,
+    IN p_nombre VARCHAR(50),
+    IN p_apellido1 VARCHAR(50),
+    IN p_apellido2 VARCHAR(50),
+    IN p_id_persona_grado_academico INT,
+    IN p_cedula VARCHAR(20),
+    IN p_fecha_nacimiento DATE,
+    IN p_imagen TEXT
+)
+BEGIN
+    UPDATE tbl_persona
+    SET
+        nombre = p_nombre,
+        apellido1 = p_apellido1,
+        apellido2 = p_apellido2,
+        id_persona_grado_academico = p_id_persona_grado_academico,
+        cedula = p_cedula,
+        fecha_nacimiento = p_fecha_nacimiento,
+        imagen = p_imagen,
+        actualizado_en = CURRENT_TIMESTAMP
+    WHERE id_persona = p_id_persona;
+END $$
+
+/* ============================================================
+   ELIMINAR (INACTIVAR) PERSONA
+   ============================================================ */
+CREATE PROCEDURE sp_eliminar_persona (
+    IN p_id_persona INT UNSIGNED
+)
+BEGIN
+    UPDATE tbl_persona
+    SET
+        id_estado = 0,
+        actualizado_en = CURRENT_TIMESTAMP
+    WHERE id_persona = p_id_persona;
+END $$
+
+/* ============================================================
+   ACTUALIZAR CONTRASEÑA
+   ============================================================ */
+CREATE PROCEDURE sp_actualizar_contrasena (
+    IN p_id_persona INT UNSIGNED,
+    IN p_contrasena VARCHAR(255)
+)
+BEGIN
+    UPDATE tbl_persona
+    SET
+        contrasena = p_contrasena,
+        actualizado_en = CURRENT_TIMESTAMP
+    WHERE id_persona = p_id_persona;
+END $$
+
+/* ============================================================
+   CORREOS
+   ============================================================ */
+CREATE PROCEDURE sp_agregar_persona_correo (
+    IN p_id_persona INT UNSIGNED,
+    IN p_correo VARCHAR(100),
+    IN p_descripcion VARCHAR(20)
+)
+BEGIN
+    INSERT INTO trn_persona_correo (id_persona, correo, descripcion)
+    VALUES (p_id_persona, p_correo, p_descripcion);
+END $$
+
+CREATE PROCEDURE sp_eliminar_persona_correo (
+    IN p_id INT UNSIGNED
+)
+BEGIN
+    DELETE FROM trn_persona_correo
+    WHERE id = p_id;
+END $$
+
+/* ============================================================
+   TELÉFONOS
+   ============================================================ */
+CREATE PROCEDURE sp_agregar_persona_telefono (
+    IN p_id_persona INT UNSIGNED,
+    IN p_id_telefono_tipo INT UNSIGNED,
+    IN p_telefono VARCHAR(20)
+)
+BEGIN
+    INSERT INTO trn_persona_telefono (id_persona, id_telefono_tipo, telefono)
+    VALUES (p_id_persona, p_id_telefono_tipo, p_telefono);
+END $$
+
+CREATE PROCEDURE sp_editar_persona_telefono (
+    IN p_id INT UNSIGNED,
+    IN p_id_telefono_tipo INT UNSIGNED,
+    IN p_telefono VARCHAR(20)
+)
+BEGIN
+    UPDATE trn_persona_telefono
+    SET
+        id_telefono_tipo = p_id_telefono_tipo,
+        telefono = p_telefono
+    WHERE id = p_id;
+END $$
+
+CREATE PROCEDURE sp_eliminar_persona_telefono (
+    IN p_id INT UNSIGNED
+)
+BEGIN
+    DELETE FROM trn_persona_telefono
+    WHERE id = p_id;
 END $$
 
 DELIMITER ;
@@ -210,62 +424,31 @@ INSERT INTO tbl_persona (
   fecha_nacimiento,
   contrasena,
   id_estado,
-  imagen,
-  creado_en,
-  actualizado_en
-) VALUES (
+  imagen
+) VALUES
+(
   'Administrador',
   'Sistema',
   'Principal',
   0,
   'ADMIN-001',
   '1990-01-01',
-  '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq', -- hash de '1234'
+  '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq',
   1,
-  '',
-  CURDATE(),
-  CURDATE()
-);
-
-INSERT INTO tbl_persona (
-  nombre,
-  apellido1,
-  apellido2,
-  id_persona_grado_academico,
-  cedula,
-  fecha_nacimiento,
-  contrasena,
-  id_estado,
-  imagen,
-  creado_en,
-  actualizado_en
-) VALUES (
+  ''
+),
+(
   'María',
   'González',
   'Rojas',
   1,
   'COORD-001',
   '1988-05-10',
-  '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq', -- 1234
+  '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq',
   1,
-  '',
-  CURDATE(),
-  CURDATE()
-);
-
-INSERT INTO tbl_persona (
-  nombre,
-  apellido1,
-  apellido2,
-  id_persona_grado_academico,
-  cedula,
-  fecha_nacimiento,
-  contrasena,
-  id_estado,
-  imagen,
-  creado_en,
-  actualizado_en
-) VALUES (
+  ''
+),
+(
   'Juan',
   'Pérez',
   'Mora',
@@ -274,65 +457,24 @@ INSERT INTO tbl_persona (
   '1995-03-22',
   '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq',
   1,
-  '',
-  CURDATE(),
-  CURDATE()
+  ''
 );
 
 
-INSERT INTO tbl_persona_correo (
-  id_persona,
-  correo,
-  descripcion
-) VALUES (
-  1,
-  'admin@analisys.lab',
-  'principal'
-);
+INSERT INTO trn_persona_correo (id_persona, correo, descripcion)
+VALUES
+(1, 'admin@analisys.lab', 'principal'),
+(2, 'coordinadora@analisys.lab', 'principal'),
+(3, 'analista1@analisys.lab', 'principal');
 
-INSERT INTO tbl_persona_correo (
-  id_persona,
-  correo,
-  descripcion
-) VALUES (
-  2,
-  'coordinadora@analisys.lab',
-  'principal'
-);
 
-INSERT INTO tbl_persona_correo (
-  id_persona,
-  correo,
-  descripcion
-) VALUES (
-  3,
-  'analista1@analisys.lab',
-  'principal'
-);
+INSERT INTO trn_persona_roles (id_persona, rol_id)
+VALUES
+(1, 1), -- ADMIN
+(2, 1), -- ADMIN (si luego decides que sea COORD, cambias aquí)
+(3, 2); -- ANALISTA
 
-INSERT INTO trn_persona_roles (
-  id_persona,
-  rol_id
-) VALUES (
-  1,
-  1
-);
 
-INSERT INTO trn_persona_roles (
-  id_persona,
-  rol_id
-) VALUES (
-  2,
-  1
-);
-
-INSERT INTO trn_persona_roles (
-  id_persona,
-  rol_id
-) VALUES (
-  3,
-  2
-);
 
 
 
