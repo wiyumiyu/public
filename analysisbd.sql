@@ -2,6 +2,8 @@ CREATE DATABASE IF NOT EXISTS analisysbd
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_0900_ai_ci;
 
+-- drop database analisysbd;
+  
 USE analisysbd;
 
 GRANT ALL PRIVILEGES ON analisysbd.* TO 'sysusuario'@'%';
@@ -195,7 +197,9 @@ INSERT INTO `analisysbd`.`migrations`
 -- ---------------------------------------------------------------------------------------------------------------------------------------------
 
 INSERT INTO trn_roles (nombre, descripcion)
-VALUES ('ADMIN', 'Administrador del sistema');
+VALUES
+  ('ADMIN', 'Administrador del sistema'),
+  ('ANALISTA', 'Analista del sistema');
 
 INSERT INTO tbl_persona (
   nombre,
@@ -223,6 +227,59 @@ INSERT INTO tbl_persona (
   CURDATE()
 );
 
+INSERT INTO tbl_persona (
+  nombre,
+  apellido1,
+  apellido2,
+  id_persona_grado_academico,
+  cedula,
+  fecha_nacimiento,
+  contrasena,
+  id_estado,
+  imagen,
+  creado_en,
+  actualizado_en
+) VALUES (
+  'María',
+  'González',
+  'Rojas',
+  1,
+  'COORD-001',
+  '1988-05-10',
+  '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq', -- 1234
+  1,
+  '',
+  CURDATE(),
+  CURDATE()
+);
+
+INSERT INTO tbl_persona (
+  nombre,
+  apellido1,
+  apellido2,
+  id_persona_grado_academico,
+  cedula,
+  fecha_nacimiento,
+  contrasena,
+  id_estado,
+  imagen,
+  creado_en,
+  actualizado_en
+) VALUES (
+  'Juan',
+  'Pérez',
+  'Mora',
+  2,
+  'ANALISTA-001',
+  '1995-03-22',
+  '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq',
+  1,
+  '',
+  CURDATE(),
+  CURDATE()
+);
+
+
 INSERT INTO tbl_persona_correo (
   id_persona,
   correo,
@@ -230,6 +287,26 @@ INSERT INTO tbl_persona_correo (
 ) VALUES (
   1,
   'admin@analisys.lab',
+  'principal'
+);
+
+INSERT INTO tbl_persona_correo (
+  id_persona,
+  correo,
+  descripcion
+) VALUES (
+  2,
+  'coordinadora@analisys.lab',
+  'principal'
+);
+
+INSERT INTO tbl_persona_correo (
+  id_persona,
+  correo,
+  descripcion
+) VALUES (
+  3,
+  'analista1@analisys.lab',
   'principal'
 );
 
@@ -241,8 +318,21 @@ INSERT INTO trn_persona_roles (
   1
 );
 
--- UPDATE users 
--- SET password = '$2y$10$f4Onfc5ENSM9.ov.sbft4.3ajT5lRVxbxVnehUKEKLosqR7UllzBq' 
--- WHERE email = 'admin@analisys.lab';
+INSERT INTO trn_persona_roles (
+  id_persona,
+  rol_id
+) VALUES (
+  2,
+  1
+);
+
+INSERT INTO trn_persona_roles (
+  id_persona,
+  rol_id
+) VALUES (
+  3,
+  2
+);
+
 
 
