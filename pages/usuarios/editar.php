@@ -277,14 +277,29 @@ document.querySelectorAll('.telefono-row').forEach(row => {
 
 function agregarCorreo() {
     document.getElementById('correos-container').insertAdjacentHTML('beforeend', `
-    <div class="row g-2 mb-2">
-        <div class="col-md-6"><input type="email" name="nuevo_correo[]" class="form-control" required></div>
-        <div class="col-md-4"><input name="correo_desc[]" class="form-control" required></div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-outline-secondary w-100"
-            onclick="this.closest('.row').remove()">—</button>
+        <div class="row g-2 mb-2">
+            <div class="col-md-6">
+                <input type="email"
+                       name="nuevo_correo[]"
+                       class="form-control"
+                       placeholder="correo@dominio.com"
+                       required>
+            </div>
+
+            <div class="col-md-4">
+                <select name="correo_desc[]" class="form-select" required>
+                    <option value="SECUNDARIO" selected>Secundario</option>
+                    <option value="PRINCIPAL">Principal</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button type="button"
+                        class="btn btn-outline-secondary w-100"
+                        onclick="this.closest('.row').remove()">—</button>
+            </div>
         </div>
-    </div>`);
+    `);
 }
 
 function agregarTelefono() {

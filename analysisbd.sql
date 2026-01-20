@@ -144,7 +144,7 @@ CREATE TABLE trn_persona_correo (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   id_persona INT UNSIGNED NOT NULL,
   correo VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  descripcion VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  descripcion ENUM('PRINCIPAL','SECUNDARIO') NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uk_persona_correo (id_persona, correo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -232,7 +232,9 @@ BEGIN
         ON pr.id_persona = p.id_persona
     LEFT JOIN trn_roles r
         ON r.id = pr.rol_id
-    WHERE pc.correo = p_correo COLLATE utf8mb4_unicode_ci
+    WHERE pc.correo COLLATE utf8mb4_unicode_ci
+          = p_correo COLLATE utf8mb4_unicode_ci
+      AND pc.descripcion = 'PRINCIPAL'
       AND p.id_estado = 1;
 END $$
 
@@ -269,7 +271,7 @@ BEGIN
         id_estado
     FROM tbl_persona
     WHERE id_persona = p_id_persona;
-END;
+END $$
 
 /* ============================================================
    5.3 PERSONAS – ESCRITURA
@@ -383,9 +385,16 @@ END $$
 CREATE PROCEDURE sp_agregar_persona_correo (
     IN p_id_persona INT UNSIGNED,
     IN p_correo VARCHAR(100),
-    IN p_descripcion VARCHAR(20)
+    IN p_descripcion ENUM('PRINCIPAL','SECUNDARIO')
 )
 BEGIN
+    IF p_descripcion = 'PRINCIPAL' THEN
+        UPDATE trn_persona_correo
+        SET descripcion = 'SECUNDARIO'
+        WHERE id_persona = p_id_persona
+          AND descripcion = 'PRINCIPAL';
+    END IF;
+
     INSERT INTO trn_persona_correo (id_persona, correo, descripcion)
     VALUES (p_id_persona, p_correo, p_descripcion);
 END $$
@@ -408,7 +417,7 @@ BEGIN
         descripcion
     FROM trn_persona_correo
     WHERE id_persona = p_id_persona;
-END;
+END $$
 
 
 /* ============================================================
@@ -446,8 +455,6 @@ BEGIN
     WHERE id = p_id;
 END $$
 
-DELIMITER $$;
-
 CREATE PROCEDURE sp_listar_telefonos_persona (
     IN p_id_persona INT UNSIGNED
 )
@@ -460,15 +467,16 @@ BEGIN
     FROM trn_persona_telefono t
     JOIN cat_telefono_tipo tt ON tt.id = t.id_telefono_tipo
     WHERE t.id_persona = p_id_persona;
-END;
+END $$
 
 CREATE PROCEDURE sp_listar_tipos_telefono ()
 BEGIN
     SELECT id, nombre
     FROM cat_telefono_tipo
     ORDER BY nombre;
-END;
+END $$
 
+DELIMITER ;
 
 /* ============================================================
    6. DATOS INICIALES
@@ -549,9 +557,9 @@ INSERT INTO tbl_persona (
 
 INSERT INTO trn_persona_correo (id_persona, correo, descripcion)
 VALUES
-(1, 'admin@analisys.lab', 'principal'),
-(2, 'coordinadora@analisys.lab', 'principal'),
-(3, 'analista1@analisys.lab', 'principal');
+(1, 'admin@analisys.lab', 'PRINCIPAL'),
+(2, 'coordinadora@analisys.lab', 'PRINCIPAL'),
+(3, 'analista1@analisys.lab', 'PRINCIPAL');
 
 
 INSERT INTO trn_persona_roles (id_persona, rol_id)
