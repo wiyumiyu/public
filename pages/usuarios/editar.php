@@ -24,6 +24,18 @@ if (isset($_GET['del_tel'])) {
 }
 
 /* =====================================================
+   1️⃣.2 ELIMINAR CORREO (MISMO ARCHIVO)
+   ===================================================== */
+if (isset($_GET['del_correo'])) {
+    $stmt = $pdo->prepare("CALL sp_eliminar_persona_correo(?)");
+    $stmt->execute([(int)$_GET['del_correo']]);
+    $stmt->closeCursor();
+
+    header("Location: editar.php?id=".$id_persona);
+    exit;
+}
+
+/* =====================================================
    2️⃣ CARGAR USUARIO (SP)
    ===================================================== */
 $stmt = $pdo->prepare("CALL sp_obtener_persona(?)");
@@ -207,8 +219,9 @@ ob_start();
     <div class="col-md-6"><input class="form-control" value="<?= htmlspecialchars($c['correo']) ?>" disabled></div>
     <div class="col-md-4"><input class="form-control" value="<?= htmlspecialchars($c['descripcion']) ?>" disabled></div>
     <div class="col-md-2">
-        <a href="correo_eliminar.php?id=<?= $c['id'] ?>&persona=<?= $id_persona ?>"
-           class="btn btn-outline-danger w-100">✖</a>
+        <a href="editar.php?id=<?= $id_persona ?>&del_correo=<?= $c['id'] ?>"
+        class="btn btn-outline-danger w-100"
+        onclick="return confirm('¿Eliminar este correo?')">✖</a>
     </div>
 </div>
 <?php endforeach; ?>
