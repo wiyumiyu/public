@@ -165,6 +165,30 @@ CREATE TABLE trn_persona_telefono (
   UNIQUE KEY uk_persona_telefono (id_persona, telefono)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Densidad Aparente
+CREATE TABLE trn_densidadaparente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    periodo YEAR NOT NULL DEFAULT (YEAR(CURDATE())),
+    archivo VARCHAR(255) NULL,
+    fecha DATE NOT NULL DEFAULT (CURDATE()),
+    analista INT NOT NULL
+);
+
+CREATE TABLE trn_densidadaparente_muestras (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_densidadaparente INT NOT NULL,
+    idlab VARCHAR(100) NOT NULL,
+    rep INT NOT NULL DEFAULT 1,
+    id_tipo INT NOT NULL -- (0, 1 o 2)
+);
+
+CREATE TABLE trn_densidadaparente_resultado (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_densidadaparente_muestras INT NOT NULL,
+    resultado DECIMAL(10,2) NOT NULL,
+    id_analisis INT NOT NULL
+);
+
 /* ============================================================
    4. RELACIONES (FOREIGN KEYS)
    ============================================================ */
@@ -203,6 +227,17 @@ FOREIGN KEY (id_telefono_tipo)
 REFERENCES cat_telefono_tipo(id)
 ON DELETE RESTRICT
 ON UPDATE CASCADE;
+
+-- Densidad Aparente
+ALTER TABLE trn_densidadaparente_muestras
+ADD CONSTRAINT fk_muestras_densidadaparente
+FOREIGN KEY (id_densidadaparente)
+REFERENCES trn_densidadaparente(id);
+
+ALTER TABLE trn_densidadaparente_resultado
+ADD CONSTRAINT fk_resultado_muestras
+FOREIGN KEY (id_densidadaparente_muestras)
+REFERENCES trn_densidadaparente_muestras(id);
 
 /* ============================================================
    5. PROCEDIMIENTOS ALMACENADOS
