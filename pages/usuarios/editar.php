@@ -146,6 +146,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->closeCursor();
         }
     }
+    
+    /* =====================================================
+   🔐 CAMBIO DE CONTRASEÑA (OPCIONAL)
+   ===================================================== */
+$pwdActual = $_POST['password_actual'] ?? '';
+$pwdNueva  = $_POST['password_nueva'] ?? '';
+$pwdConf   = $_POST['password_confirmar'] ?? '';
+
+if ($pwdActual || $pwdNueva || $pwdConf) {
+
+    // Todos los campos deben venir
+    if (!$pwdActual || !$pwdNueva || !$pwdConf) {
+        die("Debe completar todos los campos de contraseña.");
+    }
+
+    // Validar fuerza
+    $regex = '/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/';
+    if (!preg_match($regex, $pwdNueva)) {
+        die("La contraseña debe tener mínimo 8 caracteres, una mayúscula, un número y un símbolo.");
+    }
+
+    if ($pwdNueva !== $pwdConf) {
+        die("Las contraseñas nuevas no coinciden.");
+    }
+
+    // Obtener hash actual
+    $stmt = $pdo->prepare("CALL sp_obtener_contrasena_persona(?)");
+    $stmt->execute([$id_persona]);
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    if (!$data || !password_verify($pwdActual, $data['contrasena'])) {
+        die("La contraseña actual es incorrecta.");
+    }
+
+    // Guardar nueva contraseña
+    $hash = password_hash($pwdNueva, PASSWORD_DEFAULT);
+    $stmt = $pdo->prepare("CALL sp_actualizar_contrasena(?, ?)");
+    $stmt->execute([$id_persona, $hash]);
+    $stmt->closeCursor();
+}
+
 
     header("Location: listado.php");
     exit;
@@ -195,21 +237,8 @@ ob_start();
     </div>
 </div>
 
-<hr class="mt-4">
-
-<!-- CONTRASEÑA -->
-<div class="row g-3">
-    <div class="col-md-6">
-        <label class="form-label fw-semibold">Nueva contraseña</label>
-        <input type="password" name="password" class="form-control">
-    </div>
-    <div class="col-md-6">
-        <label class="form-label fw-semibold">Confirmar contraseña</label>
-        <input type="password" name="password_confirm" class="form-control">
-    </div>
-</div>
-
-<hr class="mt-4">
+<br>
+<br>
 
 <!-- CORREOS -->
 <h5 class="fw-bold">Correos electrónicos</h5>
@@ -229,7 +258,9 @@ ob_start();
 
 <button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="agregarCorreo()">Agregar correo</button>
 
-<hr class="mt-4">
+<br>
+<br>
+<br>
 
 <!-- TELÉFONOS -->
 <h5 class="fw-bold">Teléfonos</h5>
@@ -260,8 +291,37 @@ ob_start();
 </div>
 <?php endforeach; ?>
 </div>
-
 <button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="agregarTelefono()">Agregar teléfono</button>
+
+
+<br>
+<br>
+<br>
+
+<h5 class="fw-bold">Cambiar contraseña (opcional)</h5>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <label class="form-label">Contraseña actual</label>
+        <input type="password" name="password_actual" class="form-control">
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Nueva contraseña</label>
+        <input type="password" name="password_nueva" class="form-control">
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Confirmar nueva contraseña</label>
+        <input type="password" name="password_confirmar" class="form-control">
+    </div>
+</div>
+
+<small class="text-muted d-block mt-2">
+    Mínimo 8 caracteres, una mayúscula, un número y un símbolo.
+</small>
+
+<br>
 
 <div class="mt-4 d-flex gap-2">
     <button class="btn btn-primary px-4">Guardar cambios</button>
@@ -269,6 +329,7 @@ ob_start();
 </div>
 
 </form>
+
 </div>
 </div>
 
