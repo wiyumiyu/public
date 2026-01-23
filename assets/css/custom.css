@@ -115,7 +115,9 @@ body.sidebar-collapsed .pe-content {
     margin-left: 70px !important;
 }
 
-
+.pe-app-sidebar-logo a {
+    margin-left: -20px; /* mueve el logo a la izquierda */
+}
 /* ===============================
    BOTONES DE ACCIÓN EN TABLAS
    =============================== */
