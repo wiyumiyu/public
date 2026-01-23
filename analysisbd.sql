@@ -312,6 +312,8 @@ END $$
    5.3 PERSONAS – ESCRITURA
    ============================================================ */
 
+
+
 CREATE PROCEDURE sp_crear_persona (
     IN p_nombre VARCHAR(50),
     IN p_apellido1 VARCHAR(50),
@@ -332,9 +334,7 @@ BEGIN
         fecha_nacimiento,
         contrasena,
         id_estado,
-        imagen,
-        creado_en,
-        actualizado_en
+        imagen
     ) VALUES (
         p_nombre,
         p_apellido1,
@@ -344,11 +344,15 @@ BEGIN
         p_fecha_nacimiento,
         p_contrasena,
         1,
-        p_imagen,
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP
+        p_imagen
     );
-END $$
+
+    -- Return created person ID
+    SELECT LAST_INSERT_ID() AS id_persona;
+END$$
+
+
+
 
 /* ============================================================
    5.4 PERSONAS – ESTADO / SEGURIDAD
@@ -511,8 +515,53 @@ BEGIN
     ORDER BY nombre;
 END $$
 
-DELIMITER ;
 
+
+CREATE PROCEDURE sp_listar_roles()
+BEGIN
+    SELECT id, nombre
+    FROM trn_roles
+    ORDER BY nombre;
+END$$
+
+
+
+CREATE PROCEDURE sp_asignar_rol_persona (
+    IN p_id_persona INT UNSIGNED,
+    IN p_rol_id INT UNSIGNED
+)
+BEGIN
+    INSERT INTO trn_persona_roles (id_persona, rol_id)
+    VALUES (p_id_persona, p_rol_id);
+END$$
+
+
+
+CREATE PROCEDURE sp_obtener_roles_persona (
+    IN p_id_persona INT UNSIGNED
+)
+BEGIN
+    SELECT r.id, r.nombre
+    FROM trn_persona_roles pr
+    INNER JOIN trn_roles r ON r.id = pr.rol_id
+    WHERE pr.id_persona = p_id_persona;
+END$$
+
+
+
+CREATE PROCEDURE sp_actualizar_rol_persona (
+    IN p_id_persona INT UNSIGNED,
+    IN p_rol_id INT UNSIGNED
+)
+BEGIN
+    DELETE FROM trn_persona_roles
+    WHERE id_persona = p_id_persona;
+
+    INSERT INTO trn_persona_roles (id_persona, rol_id)
+    VALUES (p_id_persona, p_rol_id);
+END$$
+
+DELIMITER ;
 /* ============================================================
    6. DATOS INICIALES
    ============================================================ */
