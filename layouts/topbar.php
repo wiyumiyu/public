@@ -10,12 +10,12 @@ $avatar = $_SESSION['user']['avatar'] ?? '/assets/images/avatar/avatar-10.jpg';
                 <div class="d-inline-flex align-items-center gap-5">
 
                     <!-- LOGO (todas las rutas corregidas a absolutas) -->
-<a href="/pages/dashboard.php" class="fs-18 fw-semibold">
-    <img height="30" class="header-sidebar-logo-default d-none" alt="Logo" src="/assets/images/logo-dark.png">
-    <img height="30" class="header-sidebar-logo-light d-none" alt="Logo" src="/assets/images/logo-light.png">
-    <img height="30" class="header-sidebar-logo-small d-none" alt="Logo" src="/assets/images/logo-md.png">
-    <img height="30" class="header-sidebar-logo-small-light d-none" alt="Logo" src="/assets/images/logo-md-light.png">
-</a>
+                    <a href="/pages/dashboard.php" class="fs-18 fw-semibold">
+                        <img height="30" class="header-sidebar-logo-default d-none" alt="Logo" src="/assets/images/logo-dark.png">
+                        <img height="30" class="header-sidebar-logo-light d-none" alt="Logo" src="/assets/images/logo-light.png">
+                        <img height="30" class="header-sidebar-logo-small d-none" alt="Logo" src="/assets/images/logo-md.png">
+                        <img height="30" class="header-sidebar-logo-small-light d-none" alt="Logo" src="/assets/images/logo-md-light.png">
+                    </a>
 
                     <button type="button" class="vertical-toggle btn btn-light-light text-muted icon-btn fs-5 rounded-pill" id="toggleSidebar">
                         <i class="bi bi-arrow-bar-left header-icon"></i>
@@ -56,34 +56,45 @@ $avatar = $_SESSION['user']['avatar'] ?? '/assets/images/avatar/avatar-10.jpg';
                         </span>
 
                         <div class="d-none d-lg-block pe-2">
-                            <span class="d-block mb-0 fs-13 fw-semibold">Paul Danielle</span>
-                            <span class="d-block mb-0 fs-12 text-muted">Founder</span>
+                            <span class="d-block mb-0 fs-13 fw-semibold">
+                                <?= htmlspecialchars($_SESSION['nombre'] . ' ' . $_SESSION['apellido1']) ?>
+                            </span>
+                            <span class="d-block mb-0 fs-12 text-muted">
+                                <?= implode(', ', $_SESSION['roles']) ?>
+                            </span>
                         </div>
 
                     </button>
 
                     <div class="dropdown-menu dropdown-mega-sm header-dropdown-menu p-3">
+                        <a href="/pages/usuarios/editar.php?id=<?= $_SESSION['id_persona'] ?>&from=perfil">
+                            <!-- HEADER DEL PERFIL -->
+                            <div class="border-bottom pb-2 mb-2 d-flex align-items-center gap-2">
 
-                        <!-- HEADER DEL PERFIL -->
-                        <div class="border-bottom pb-2 mb-2 d-flex align-items-center gap-2">
+                                <img src="/assets/images/avatar/dummy_avatar.jpg"
+                                     class="rounded-circle header-profile-user"
+                                     alt="user-image"
+                                     width="35" height="35">
 
-                            <img src="/assets/images/avatar/dummy_avatar.jpg"
-                                 class="rounded-circle header-profile-user"
-                                 alt="user-image"
-                                 width="35" height="35">
+                                <div>
+                                    <h6 class="mb-0 lh-base">
+                                        <?= htmlspecialchars($_SESSION['nombre'] . ' ' . $_SESSION['apellido1']) ?>
+                                    </h6>
 
-                            <div>
-                                <a href="javascript:void(0)">
-                                    <h6 class="mb-0 lh-base">Paul Danielle</h6>
-                                </a>
-                                <p class="mb-0 fs-13 text-muted">paul@fabkin.com</p>
+
+
+                                    <p class="mb-0 fs-13 text-muted">
+                                        Usuario del sistema
+                                    </p>
+                                </div>
+
                             </div>
-                        </div>
-
+                        </a> 
                         <ul class="list-unstyled mb-0">
                             <li>
+                              
                                 <a class="dropdown-item" href="/logout.php">
-                                    <i class="bi bi-box-arrow-right me-1"></i> Sign Out
+                                    <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
                                 </a>
                             </li>
                         </ul>

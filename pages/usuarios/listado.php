@@ -4,20 +4,35 @@ ob_start();
 
 require_once __DIR__ . '/../../includes/config.php';
 
+/* =====================================================
+  ELIMINAR USUARIO (SOFT DELETE)
+  ===================================================== */
+if (isset($_GET['eliminar']) && is_numeric($_GET['eliminar'])) {
+
+    $idEliminar = (int) $_GET['eliminar'];
+
+    $stmt = $pdo->prepare("CALL sp_eliminar_persona(?)");
+    $stmt->execute([$idEliminar]);
+    $stmt->closeCursor();
+
+    header("Location: listado.php");
+    exit;
+}
+
+
 /*
- |=====================================================
- | CONSULTA REAL A BASE DE DATOS
- |=====================================================
- | - Nombre completo
- | - Cédula
- | - Rol
- | - Estado (1=Activo, 0=Inactivo)
+  |=====================================================
+  | CONSULTA REAL A BASE DE DATOS
+  |=====================================================
+  | - Nombre completo
+  | - Cédula
+  | - Rol
+  | - Estado (1=Activo, 0=Inactivo)
  */
 $stmt = $pdo->prepare("CALL sp_listado_usuarios()");
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $stmt->closeCursor();
-
 ?>
 
 <div class="container-fluid page-inner">
@@ -26,7 +41,7 @@ $stmt->closeCursor();
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold"><?= htmlspecialchars($pageTitle) ?></h1>
 
-        <a href="/pages/usuarios/editar.php" class="btn btn-primary px-4">
+        <a href="crear.php" class="btn btn-primary px-4">
             + Nuevo usuario
         </a>
     </div>
@@ -95,31 +110,31 @@ $stmt->closeCursor();
                                             <a href="/pages/usuarios/editar.php?id=<?= $u['id_persona'] ?>"
                                                class="btn btn-sm"
                                                style="
-                                                    border: 1px solid #0d6efd;
-                                                    background-color: rgba(13,110,253,0.10);
-                                                    color: #0d6efd;
-                                                    border-radius: 8px;
-                                                    width: 38px;
-                                                    height: 38px;
-                                                    display:flex;
-                                                    justify-content:center;
-                                                    align-items:center;">
+                                               border: 1px solid #0d6efd;
+                                               background-color: rgba(13,110,253,0.10);
+                                               color: #0d6efd;
+                                               border-radius: 8px;
+                                               width: 38px;
+                                               height: 38px;
+                                               display:flex;
+                                               justify-content:center;
+                                               align-items:center;">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
 
                                             <!-- ELIMINAR -->
                                             <button class="btn btn-sm"
-                                                    onclick="eliminarUsuario(<?= $u['id_persona'] ?>)"
+                                                    onclick="confirmarEliminacionUsuario(<?= $u['id_persona'] ?>)"
                                                     style="
-                                                        border:1px solid #d9534f;
-                                                        background-color:rgba(217,83,79,0.12);
-                                                        color:#d9534f;
-                                                        border-radius:8px;
-                                                        width:38px;
-                                                        height:38px;
-                                                        display:flex;
-                                                        justify-content:center;
-                                                        align-items:center;">
+                                                    border:1px solid #d9534f;
+                                                    background-color:rgba(217,83,79,0.12);
+                                                    color:#d9534f;
+                                                    border-radius:8px;
+                                                    width:38px;
+                                                    height:38px;
+                                                    display:flex;
+                                                    justify-content:center;
+                                                    align-items:center;">
                                                 <i class="bi bi-trash"></i>
                                             </button>
 
@@ -138,15 +153,78 @@ $stmt->closeCursor();
         </div>
 
     </div>
+
+
+    <!-- Modal Confirmar Eliminación Usuario -->
+    <div class="modal fade" id="confirmDeleteUserModal"
+         data-bs-backdrop="static"
+         data-bs-keyboard="false"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">
+                        Eliminar usuario
+                    </h5>
+                    <button type="button"
+                            class="btn-close icon-btn-sm"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <i class="ri-close-large-line fw-semibold"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="mb-0">
+                        ¿Está seguro que desea eliminar este usuario?<br>
+                        <small class="text-muted">
+                            El usuario quedará inactivo en el sistema.
+                        </small>
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-light"
+                            data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-danger"
+                            id="confirmDeleteUserBtn">
+                        Eliminar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>    
 </div>
 
 <script>
-function eliminarUsuario(id) {
-    if (confirm("¿Eliminar el usuario seleccionado?")) {
-        alert("Función no implementada aún.");
+    let usuarioEliminar = null;
+
+    function confirmarEliminacionUsuario(id) {
+        usuarioEliminar = id;
+        const modal = new bootstrap.Modal(
+                document.getElementById('confirmDeleteUserModal')
+                );
+        modal.show();
     }
-}
+
+    document.getElementById('confirmDeleteUserBtn')
+            .addEventListener('click', function () {
+                if (usuarioEliminar) {
+                    window.location.href =
+                            window.location.pathname + '?eliminar=' + usuarioEliminar;
+                }
+            });
 </script>
+
 
 <?php
 $content = ob_get_clean();
