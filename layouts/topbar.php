@@ -11,10 +11,10 @@ $avatar = $_SESSION['user']['avatar'] ?? '/assets/images/avatar/avatar-10.jpg';
 
                     <!-- LOGO (todas las rutas corregidas a absolutas) -->
                     <a href="/pages/dashboard.php" class="fs-18 fw-semibold">
-                        <img height="30" class="header-sidebar-logo-default d-none" alt="Logo" src="/assets/images/logo-dark.png">
-                        <img height="30" class="header-sidebar-logo-light d-none" alt="Logo" src="/assets/images/logo-light.png">
-                        <img height="30" class="header-sidebar-logo-small d-none" alt="Logo" src="/assets/images/logo-md.png">
-                        <img height="30" class="header-sidebar-logo-small-light d-none" alt="Logo" src="/assets/images/logo-md-light.png">
+                        <img height="30" class="header-sidebar-logo-default d-none" alt="Logo" src="/assets/images/logo/RecursosNaturales.svg">
+                        <img height="30" class="header-sidebar-logo-light d-none" alt="Logo" src="/assets/images/logo/RecursosNaturales.svg">
+                        <img height="30" class="header-sidebar-logo-small d-none" alt="Logo" src="/assets/images/logo/RecursosNaturales.svg">
+                        <img height="30" class="header-sidebar-logo-small-light d-none" alt="Logo" src="/assets/images/logo/RecursosNaturales.svg">
                     </a>
 
                     <button type="button" class="vertical-toggle btn btn-light-light text-muted icon-btn fs-5 rounded-pill" id="toggleSidebar">

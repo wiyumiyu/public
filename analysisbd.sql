@@ -12,7 +12,7 @@ CREATE DATABASE IF NOT EXISTS analisysbd
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_0900_ai_ci;
 
--- drop database analisysbd;
+drop database analisysbd;
   
 USE analisysbd;
 
@@ -189,6 +189,18 @@ CREATE TABLE trn_densidadaparente_resultado (
     id_analisis INT NOT NULL
 );
 
+CREATE TABLE tbl_password_resets (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_persona INT UNSIGNED NOT NULL,
+    token_hash CHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+
+    UNIQUE KEY uk_tbl_password_resets_token (token_hash),
+    INDEX idx_tbl_password_resets_persona (id_persona)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
 /* ============================================================
    4. RELACIONES (FOREIGN KEYS)
    ============================================================ */
@@ -226,6 +238,13 @@ ADD CONSTRAINT fk_persona_telefono_tipo
 FOREIGN KEY (id_telefono_tipo)
 REFERENCES cat_telefono_tipo(id)
 ON DELETE RESTRICT
+ON UPDATE CASCADE;
+
+ALTER TABLE tbl_password_resets
+ADD CONSTRAINT fk_tbl_password_resets_persona
+FOREIGN KEY (id_persona)
+REFERENCES tbl_persona(id_persona)
+ON DELETE CASCADE
 ON UPDATE CASCADE;
 
 -- Densidad Aparente
